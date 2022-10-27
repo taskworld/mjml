@@ -1,5 +1,5 @@
-import { BodyComponent } from 'mjml-core'
 import { isNil } from 'lodash'
+import { BodyComponent } from '../../mjml-core/src'
 
 export default class MjSocial extends BodyComponent {
   static componentName = 'mj-social'

@@ -1,4 +1,4 @@
-import { BodyComponent } from 'mjml-core'
+import { BodyComponent } from '../../mjml-core/src'
 
 export default class MjAccordion extends BodyComponent {
   static componentName = 'mj-accordion'

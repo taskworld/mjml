@@ -1,6 +1,6 @@
 const MJMLParser = require('../lib/index.js')
 require('mjml')
-const components = require('mjml-core').components
+const components = require('../../mjml-core/src').components
 const chai = require('chai')
 const displayDiff = require('./test-utils').displayDiff
 const omitDeepLodash = require('./test-utils').omitDeepLodash

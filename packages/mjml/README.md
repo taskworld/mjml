@@ -39,7 +39,7 @@
 
 # Installation
 
-You can install `MJML` with `NPM` to use it with NodeJS or the Command Line Interface. If you're not sure what those are, head over to <a href="#usage">Usage</a> for other ways to use MJML.
+You can install `MJML` with `NPM` to use it with NodeJS or a web browser. If you're not sure what those are, head over to <a href="#usage">Usage</a> for other ways to use MJML.
 
 ```bash
 npm install mjml
@@ -65,27 +65,6 @@ MJML comes with an ecosystem of tools and plugins, check out:
 - [Sublime Text plugin](https://packagecontrol.io/packages/MJML-syntax) (MJML needs to be installed separately)
 
 For more tools, check the [Community](https://mjml.io/community) page.
-
-## Command line interface
-
-> Compiles the file and outputs the HTML generated in `output.html`
-
-```bash
-mjml input.mjml -o output.html
-```
-
-You can pass optional `arguments` to the CLI and combine them.
-
-argument | description | default value
----------|--------|--------------
-`mjml -m [input]` | Migrates a v3 MJML file to the v4 syntax | NA
-`mjml [input] -o [output]` | Writes the output to [output] | NA
-`mjml [input] -s` | Writes the output to `stdout` | NA
-`mjml -w [input]` | Watches the changes made to `[input]` (file or folder) | NA
-`mjml [input] --config.beautify` | Beautifies the output (`true` or `false`) | true
-`mjml [input] --config.minify` | Minifies the output (`true` or `false`) | false
-
-See [mjml-cli documentation](https://github.com/mjmlio/mjml/blob/master/packages/mjml-cli/README.md) for more information about config options.
 
 ## Inside Node.js
 
@@ -122,16 +101,10 @@ option   | unit   | description  | default value
 -------------|--------|--------------|---------------
 fonts  | object | Default fonts imported in the HTML rendered by MJML | See in [index.js](https://github.com/mjmlio/mjml/blob/master/packages/mjml-core/src/index.js#L100-L108)
 keepComments | boolean | Option to keep comments in the HTML output | true
-ignoreIncludes | boolean | Option to ignore mj-includes | false
-beautify | boolean | Option to beautify the HTML output | false
-minify | boolean | Option to minify the HTML output | false
 validationLevel | string | Available values for the [validator](https://github.com/mjmlio/mjml/tree/master/packages/mjml-validator#validating-mjml): 'strict', 'soft', 'skip'  | 'soft'
 filePath | string | Path of file, used for relative paths in mj-includes | '.'
 preprocessors | array of functions | Preprocessors applied to the xml before parsing. Input must be xml, not json. Functions must be (xml: string) => string | []
 juicePreserveTags | Preserve some tags when inlining css, see [mjml-cli documentation](https://github.com/mjmlio/mjml/blob/master/packages/mjml-cli/README.md) for more info | NA
-minifyOptions | Options for html minifier, see [mjml-cli documentation](https://github.com/mjmlio/mjml/blob/master/packages/mjml-cli/README.md) for more info | NA
-mjmlConfigPath | string | The path or directory of the `.mjmlconfig` file (for custom components use) | `process.cwd()`
-useMjmlConfigOptions | Allows to use the `config` attribute from `.mjmlconfig` file | false
 
 Note that it's also possible to define preprocessors in your mjmlconfig file. For this, you need to use a `.mjmlconfig.js` file. This js file needs to export an Object with the same structure as a standard JSON .mjmlconfig file.  
 

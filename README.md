@@ -1,3 +1,10 @@
+This is a forked version of the original https://github.com/mjmlio/mjml which can be run on both Node.js and a web browser. It has the following known limitations:
+- Does not support features that require Node.js API, such as file reading.
+- Does not support features involving the `.mjmlconfig` file, such as community/custom components.
+- Does not support `options.skeleton`, `options.minify` and `options.beautify`.
+- Does not support `mj-include` tags.
+- Does not have backward compatibility with MJML 3.
+
 # MJML 4
 
 If you're looking for MJML 3.3.X check [this branch](https://github.com/mjmlio/mjml/tree/3.3.x)
@@ -46,7 +53,7 @@ If you're looking for MJML 3.3.X check [this branch](https://github.com/mjmlio/m
 
 # Installation
 
-You can install `MJML` with `NPM` to use it with NodeJS or the Command Line Interface. If you're not sure what those are, head over to <a href="#usage">Usage</a> for other ways to use MJML.
+You can install `MJML` with `NPM` to use it with NodeJS or a web browser. If you're not sure what those are, head over to <a href="#usage">Usage</a> for other ways to use MJML.
 
 ```bash
 npm install mjml
@@ -85,27 +92,6 @@ MJML comes with an ecosystem of tools and plugins, check out:
 
 For more tools, check the [Community](https://mjml.io/community) page.
 
-## Command line interface
-
-> Compiles the file and outputs the HTML generated in `output.html`
-
-```bash
-mjml input.mjml -o output.html
-```
-
-You can pass optional `arguments` to the CLI and combine them.
-
-argument | description | default value
----------|--------|--------------
-`mjml -m [input]` | Migrates a v3 MJML file to the v4 syntax | NA
-`mjml [input] -o [output]` | Writes the output to [output] | NA
-`mjml [input] -s` | Writes the output to `stdout` | NA
-`mjml -w [input]` | Watches the changes made to `[input]` (file or folder) | NA
-`mjml [input] --config.beautify` | Beautifies the output (`true` or `false`) | true
-`mjml [input] --config.minify` | Minifies the output (`true` or `false`) | false
-
-See [mjml-cli documentation](https://github.com/mjmlio/mjml/blob/master/packages/mjml-cli/README.md) for more information about config options.
-
 ## Inside Node.js
 
 ```javascript
@@ -141,45 +127,10 @@ option   | unit   | description  | default value
 -------------|--------|--------------|---------------
 fonts  | object | Default fonts imported in the HTML rendered by MJML | See in [index.js](https://github.com/mjmlio/mjml/blob/master/packages/mjml-core/src/index.js#L100-L108)
 keepComments | boolean | Option to keep comments in the HTML output | true
-ignoreIncludes | boolean | Option to ignore mj-includes | false
-beautify | boolean | Option to beautify the HTML output | false
-minify | boolean | Option to minify the HTML output | false
 validationLevel | string | Available values for the [validator](https://github.com/mjmlio/mjml/tree/master/packages/mjml-validator#validating-mjml): 'strict', 'soft', 'skip'  | 'soft'
 filePath | string | Path of file, used for relative paths in mj-includes | '.'
 preprocessors | array of functions | Preprocessors applied to the xml before parsing. Input must be xml, not json. Functions must be (xml: string) => string | []
 juicePreserveTags | Preserve some tags when inlining css, see [mjml-cli documentation](https://github.com/mjmlio/mjml/blob/master/packages/mjml-cli/README.md) for more info | NA
-minifyOptions | Options for html minifier, see [mjml-cli documentation](https://github.com/mjmlio/mjml/blob/master/packages/mjml-cli/README.md) for more info | NA
-mjmlConfigPath | string | The path or directory of the `.mjmlconfig` file (for custom components use) | `process.cwd()`
-useMjmlConfigOptions | Allows to use the `config` attribute from `.mjmlconfig` file | false
-
-## Client-side (in browser)
-
-```javascript
-var mjml2html = require('mjml-browser')
-
-/*
-  Compile a mjml string
-*/
-var htmlOutput = mjml2html(`
-  <mjml>
-    <mj-body>
-      <mj-section>
-        <mj-column>
-          <mj-text>
-            Hello World!
-          </mj-text>
-        </mj-column>
-      </mj-section>
-    </mj-body>
-  </mjml>
-`, options)
-
-
-/*
-  Print the responsive HTML generated and MJML errors if any
-*/
-console.log(htmlOutput)
-```
 
 ## API
 

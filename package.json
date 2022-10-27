@@ -1,18 +1,26 @@
 {
   "name": "mjml-master",
+  "version": "4.13.0-d",
   "private": true,
+  "main": "packages/mjml/src/index.js",
   "scripts": {
     "build:watch": "lerna run build --parallel -- -- -w",
-    "build": "lerna run build --parallel --ignore mjml-browser",
-    "build-browser": "cd packages/mjml-browser && yarn build",
+    "build": "lerna run build --parallel",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "postinstall": "lerna bootstrap",
+    "prepare": "lerna bootstrap",
     "prettier": "prettier --write \"packages/**/{src,bin}/**/*.?(js|json)\""
   },
   "workspaces": [
     "packages/*"
   ],
+  "dependencies": {
+    "cheerio": "1.0.0-rc.10",
+    "detect-node": "2.0.4",
+    "htmlparser2": "^4.1.0",
+    "juice": "^7.0.0",
+    "lodash": "^4.17.21"
+  },
   "devDependencies": {
     "@babel/core": "^7.8.7",
     "@babel/plugin-proposal-class-properties": "^7.8.3",

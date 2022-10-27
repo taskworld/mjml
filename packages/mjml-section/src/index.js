@@ -1,5 +1,5 @@
-import { BodyComponent, suffixCssClasses } from 'mjml-core'
 import { flow, identity, join, filter } from 'lodash/fp'
+import { BodyComponent, suffixCssClasses } from '../../mjml-core/src'
 
 const makeBackgroundString = flow(filter(identity), join(' '))
 

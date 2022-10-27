@@ -10,18 +10,14 @@ import {
   each,
   isEmpty,
 } from 'lodash'
-import path from 'path'
 import juice from 'juice'
-import { html as htmlBeautify } from 'js-beautify'
-import { minify as htmlMinify } from 'html-minifier'
 import cheerio from 'cheerio'
 
-import MJMLParser from 'mjml-parser-xml'
+import MJMLParser from '../../mjml-parser-xml/src'
 import MJMLValidator, {
   dependencies as globalDependencies,
   assignDependencies,
-} from 'mjml-validator'
-import { handleMjml3 } from 'mjml-migrate'
+} from '../../mjml-validator/src'
 
 import { initComponent } from './createComponent'
 import globalComponents, {
@@ -35,11 +31,6 @@ import mergeOutlookConditionnals from './helpers/mergeOutlookConditionnals'
 import minifyOutlookConditionnals from './helpers/minifyOutlookConditionnals'
 import defaultSkeleton from './helpers/skeleton'
 import { initializeType } from './types/type'
-
-import handleMjmlConfig, {
-  readMjmlConfig,
-  handleMjmlConfigComponents,
-} from './helpers/mjmlconfig'
 
 const isNode = require('detect-node')
 
@@ -56,44 +47,11 @@ export default function mjml2html(mjml, options = {}) {
   let errors = []
 
   if (isNode && typeof options.skeleton === 'string') {
-    /* eslint-disable global-require */
-    /* eslint-disable import/no-dynamic-require */
-    options.skeleton = require(options.skeleton.charAt(0) === '.'
-      ? path.resolve(process.cwd(), options.skeleton)
-      : options.skeleton)
-    /* eslint-enable global-require */
-    /* eslint-enable import/no-dynamic-require */
+    throw new Error('options.skeleton is not supported in this forked version of MJML')
   }
 
-  let packages = {}
-  let confOptions = {}
-  let mjmlConfigOptions = {}
-  let confPreprocessors = []
-  let error = null
-  let componentRootPath = null
-
-  if ((isNode && options.useMjmlConfigOptions) || options.mjmlConfigPath) {
-    const mjmlConfigContent = readMjmlConfig(options.mjmlConfigPath)
-
-    ;({
-      mjmlConfig: {
-        packages,
-        options: confOptions,
-        preprocessors: confPreprocessors,
-      },
-      componentRootPath,
-      error,
-    } = mjmlConfigContent)
-
-    if (options.useMjmlConfigOptions) {
-      mjmlConfigOptions = confOptions
-    }
-  }
-
-  // if mjmlConfigPath is specified then we need to register components it on each call
-  if (isNode && !error && options.mjmlConfigPath) {
-    handleMjmlConfigComponents(packages, componentRootPath, registerComponent)
-  }
+  const mjmlConfigOptions = {}
+  const confPreprocessors = []
 
   const {
     beautify = false,
@@ -108,15 +66,13 @@ export default function mjml2html(mjml, options = {}) {
     },
     keepComments,
     minify = false,
-    minifyOptions = {},
-    ignoreIncludes = false,
+    ignoreIncludes = true,
     juiceOptions = {},
     juicePreserveTags = null,
     skeleton = defaultSkeleton,
     validationLevel = 'soft',
     filePath = '.',
     actualPath = '.',
-    noMigrateWarn = false,
     preprocessors,
     presets = [],
   } = {
@@ -144,8 +100,6 @@ export default function mjml2html(mjml, options = {}) {
       ignoreIncludes,
     })
   }
-
-  mjml = handleMjml3(mjml, { noMigrateWarn })
 
   const globalData = {
     backgroundColor: '',
@@ -394,31 +348,11 @@ export default function mjml2html(mjml, options = {}) {
   content = mergeOutlookConditionnals(content)
 
   if (beautify) {
-    // eslint-disable-next-line no-console
-    console.warn(
-      '"beautify" option is deprecated in mjml-core and only available in mjml cli.',
-    )
-    content = htmlBeautify(content, {
-      indent_size: 2,
-      wrap_attributes_indent_size: 2,
-      max_preserve_newline: 0,
-      preserve_newlines: false,
-    })
+    throw new Error('options.beautify is not supported in this forked version of MJML')
   }
 
   if (minify) {
-    // eslint-disable-next-line no-console
-    console.warn(
-      '"minify" option is deprecated in mjml-core and only available in mjml cli.',
-    )
-
-    content = htmlMinify(content, {
-      collapseWhitespace: true,
-      minifyCSS: false,
-      caseSensitive: true,
-      removeEmptyAttributes: true,
-      ...minifyOptions,
-    })
+    throw new Error('options.minify is not supported in this forked version of MJML')
   }
 
   return {
@@ -428,10 +362,6 @@ export default function mjml2html(mjml, options = {}) {
   }
 }
 
-if (isNode) {
-  handleMjmlConfig(process.cwd(), registerComponent)
-}
-
 export {
   globalComponents as components,
   initComponent,
@@ -439,7 +369,6 @@ export {
   assignComponents,
   makeLowerBreakpoint,
   suffixCssClasses,
-  handleMjmlConfig,
   initializeType,
 }
 

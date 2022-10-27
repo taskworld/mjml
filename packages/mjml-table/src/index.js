@@ -1,7 +1,6 @@
-import widthParser from 'mjml-core/lib/helpers/widthParser'
-
-import { BodyComponent } from 'mjml-core'
 import { reduce } from 'lodash'
+import widthParser from '../../mjml-core/src/helpers/widthParser'
+import { BodyComponent } from '../../mjml-core/src'
 
 export default class MjTable extends BodyComponent {
   static componentName = 'mj-table'

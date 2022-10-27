@@ -3,9 +3,6 @@
   "description": "MJML: the only framework that makes responsive-email easy",
   "version": "4.13.0",
   "main": "lib/index.js",
-  "bin": {
-    "mjml": "bin/mjml"
-  },
   "files": [
     "bin",
     "lib"
@@ -27,9 +24,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.14.6",
-    "mjml-cli": "4.13.0",
     "mjml-core": "4.13.0",
-    "mjml-migrate": "4.13.0",
     "mjml-preset-core": "4.13.0",
     "mjml-validator": "4.13.0"
   },

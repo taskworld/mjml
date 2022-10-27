@@ -12,8 +12,6 @@ There are 3 types of packages:
 
 * `mjml-core`: the engine that renders mjml components
 
-* `mjml-cli`: the client, base on the mjml-core interface
-
 * `mjml`: a standalone client including the standard library of components
 
 * one standalone package for each component

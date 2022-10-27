@@ -1,4 +1,4 @@
-import { HeadComponent } from 'mjml-core'
+import { HeadComponent } from '../../mjml-core/src'
 
 export default class MjStyle extends HeadComponent {
   static componentName = 'mj-style'

@@ -2,8 +2,6 @@ import { Parser } from 'htmlparser2'
 
 import { isObject, findLastIndex, find } from 'lodash'
 import { filter, map, flow } from 'lodash/fp'
-import path from 'path'
-import fs from 'fs'
 
 import cleanNode from './helpers/cleanNode'
 import convertBooleansOnAttrs from './helpers/convertBooleansOnAttrs'
@@ -43,17 +41,6 @@ export default function MJMLParser(xml, options = {}, includedIn = []) {
     map((component) => component.getTagName()),
   )({ ...components })
 
-  let cwd = process.cwd()
-
-  if (isNode && filePath) {
-    try {
-      const isDir = fs.lstatSync(filePath).isDirectory()
-      cwd = isDir ? filePath : path.dirname(filePath)
-    } catch (e) {
-      throw new Error('Specified filePath does not exist')
-    }
-  }
-
   let mjml = null
   let cur = null
   let inInclude = !!includedIn.length
@@ -61,155 +48,7 @@ export default function MJMLParser(xml, options = {}, includedIn = []) {
   const cssIncludes = []
   const currentEndingTagIndexes = { startIndex: 0, endIndex: 0 }
 
-  const findTag = (tagName, tree) => find(tree.children, { tagName })
   const lineIndexes = indexesForNewLine(xml)
-
-  const handleCssHtmlInclude = (file, attrs, line) => {
-    const partialPath = path.resolve(cwd, file)
-    let content
-    try {
-      content = fs.readFileSync(partialPath, 'utf8')
-    } catch (e) {
-      const newNode = {
-        line,
-        file,
-        absoluteFilePath: path.resolve(cwd, actualPath),
-        parent: cur,
-        tagName: 'mj-raw',
-        content: `<!-- mj-include fails to read file : ${file} at ${partialPath} -->`,
-        children: [],
-        errors: [
-          {
-            type: 'include',
-            params: { file, partialPath },
-          },
-        ],
-      }
-      cur.children.push(newNode)
-
-      return
-    }
-
-    if (attrs.type === 'html') {
-      const newNode = {
-        line,
-        file,
-        absoluteFilePath: path.resolve(cwd, actualPath),
-        parent: cur,
-        tagName: 'mj-raw',
-        content,
-      }
-      cur.children.push(newNode)
-
-      return
-    }
-
-    const attributes =
-      attrs['css-inline'] === 'inline' ? { inline: 'inline' } : {}
-
-    const newNode = {
-      line,
-      file,
-      absoluteFilePath: path.resolve(cwd, actualPath),
-      tagName: 'mj-style',
-      content,
-      children: [],
-      attributes,
-    }
-    cssIncludes.push(newNode)
-  }
-
-  const handleInclude = (file, line) => {
-    const partialPath = path.resolve(cwd, file)
-    const curBeforeInclude = cur
-
-    if (find(cur.includedIn, { file: partialPath }))
-      throw new Error(`Circular inclusion detected on file : ${partialPath}`)
-
-    let content
-
-    try {
-      content = fs.readFileSync(partialPath, 'utf8')
-    } catch (e) {
-      const newNode = {
-        line,
-        file,
-        absoluteFilePath: path.resolve(cwd, actualPath),
-        parent: cur,
-        tagName: 'mj-raw',
-        content: `<!-- mj-include fails to read file : ${file} at ${partialPath} -->`,
-        children: [],
-        errors: [
-          {
-            type: 'include',
-            params: { file, partialPath },
-          },
-        ],
-      }
-      cur.children.push(newNode)
-
-      return
-    }
-
-    content =
-      content.indexOf('<mjml>') === -1
-        ? `<mjml><mj-body>${content}</mj-body></mjml>`
-        : content
-
-    const partialMjml = MJMLParser(
-      content,
-      {
-        ...options,
-        filePath: partialPath,
-        actualPath: partialPath,
-      },
-      [
-        ...cur.includedIn,
-        {
-          file: cur.absoluteFilePath,
-          line,
-        },
-      ],
-    )
-
-    const bindToTree = (children, tree = cur) =>
-      children.map((c) => ({ ...c, parent: tree }))
-
-    if (partialMjml.tagName !== 'mjml') {
-      return
-    }
-
-    const body = findTag('mj-body', partialMjml)
-    const head = findTag('mj-head', partialMjml)
-
-    if (body) {
-      const boundChildren = bindToTree(body.children)
-      cur.children = [...cur.children, ...boundChildren]
-    }
-
-    if (head) {
-      let curHead = findTag('mj-head', mjml)
-
-      if (!curHead) {
-        mjml.children.push({
-          file: actualPath,
-          absoluteFilePath: path.resolve(cwd, actualPath),
-          parent: mjml,
-          tagName: 'mj-head',
-          children: [],
-          includedIn: [],
-        })
-
-        curHead = findTag('mj-head', mjml)
-      }
-
-      const boundChildren = bindToTree(head.children, curHead)
-      curHead.children = [...curHead.children, ...boundChildren]
-    }
-
-    // must restore cur to the cur before include started
-    cur = curBeforeInclude
-  }
 
   const parser = new Parser(
     {
@@ -238,12 +77,14 @@ export default function MJMLParser(xml, options = {}, includedIn = []) {
           if (ignoreIncludes || !isNode) return
 
           if (attrs.type === 'css' || attrs.type === 'html') {
-            handleCssHtmlInclude(decodeURIComponent(attrs.path), attrs, line)
+            // Disable this feature as it does not work on a web browser
+            // handleCssHtmlInclude(decodeURIComponent(attrs.path), attrs, line)
             return
           }
 
           inInclude = true
-          handleInclude(decodeURIComponent(attrs.path), line)
+          // Disable this feature as it does not work on a web browser
+          // handleInclude(decodeURIComponent(attrs.path), line)
           return
         }
 
@@ -254,7 +95,7 @@ export default function MJMLParser(xml, options = {}, includedIn = []) {
 
         const newNode = {
           file: actualPath,
-          absoluteFilePath: isNode ? path.resolve(cwd, actualPath) : actualPath,
+          absoluteFilePath: actualPath,
           line,
           includedIn,
           parent: cur,

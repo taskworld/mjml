@@ -1,8 +1,8 @@
-import { BodyComponent } from 'mjml-core'
-import { range, repeat, min, map } from 'lodash'
 import crypto from 'crypto'
+import { range, repeat, min, map } from 'lodash'
+import { BodyComponent } from '../../mjml-core/src'
 
-import { msoConditionalTag } from 'mjml-core/lib/helpers/conditionalTag'
+import { msoConditionalTag } from '../../mjml-core/src/helpers/conditionalTag'
 
 export default class MjCarousel extends BodyComponent {
   static componentName = 'mj-carousel'

@@ -1,7 +1,7 @@
-import { BodyComponent } from 'mjml-core'
 import { flow, identity, join, filter } from 'lodash/fp'
+import { BodyComponent } from '../../mjml-core/src'
 
-import widthParser from 'mjml-core/lib/helpers/widthParser'
+import widthParser from '../../mjml-core/src/helpers/widthParser'
 
 const makeBackgroundString = flow(filter(identity), join(' '))
 

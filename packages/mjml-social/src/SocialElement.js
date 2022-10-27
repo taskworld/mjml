@@ -1,5 +1,5 @@
-import { BodyComponent } from 'mjml-core'
 import { get, each } from 'lodash'
+import { BodyComponent } from '../../mjml-core/src'
 
 const IMG_BASE_URL = 'https://www.mailjet.com/images/theme/v1/icons/ico-social/'
 

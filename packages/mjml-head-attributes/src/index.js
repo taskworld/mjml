@@ -1,6 +1,6 @@
 import { forEach, omit, reduce } from 'lodash'
 
-import { HeadComponent } from 'mjml-core'
+import { HeadComponent } from '../../mjml-core/src'
 
 export default class MjAttributes extends HeadComponent {
   static componentName = 'mj-attributes'
